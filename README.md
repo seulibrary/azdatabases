@@ -11,9 +11,14 @@ Install with composer. Use the following command in your terminal window.
 ```
 composer require seumunday/azdatabases
 ```
-### Add Service Provider
 
-?clear caches here?
+Create new autoloads
+
+```
+composer dump-auto
+```
+
+### Add Service Provider
 
 Add the following to your service providers in config/app.php
 
@@ -63,7 +68,7 @@ To populate it instantly, change daily() to everyMinute(), then run the followin
 
 To run the command:
 ```
-artisan schedule:run
+php artisan schedule:run
 ```
 
 > NOTE: The data is populated by accessing the ALMA api, and downloading it ever day. To set this up, you will need to make sure you have set up scheduling. https://laravel.com/docs/5.4/scheduling
@@ -82,6 +87,8 @@ If you have Laravel 5.4, it will be in your webpack.js file, and will instead lo
 ```
 
 > If you store your JS files else where, make sure to also change the script url in the view.
+
+> If this is a new project, don't forget to run 'npm install'
 
 #### Install vue-router
 
@@ -112,3 +119,5 @@ TODO: Write usage instructions
 TODO: Write more history
 
 This project was based on [Justin Kells AZ Database project](https://github.com/justinkelly/az_databases). 
+
+
