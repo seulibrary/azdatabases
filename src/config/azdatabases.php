@@ -2,6 +2,7 @@
 
 return [
     'almaApi' => [
+        'slug' => 'databases',
         'url' => '',
     ],
 ];

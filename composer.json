@@ -2,11 +2,11 @@
     "name": "seumunday/azdatabases",
     "description": "Connect to alma and extract a list of databases for searching.",
     "keywords": [
-		"laravel"
+		"laravel", "alma", "primo", "exlibris", "database", "databases"
 	],
     "homepage": "https://github.com/seumunday/Azdatabases",
     "license": "GNU General Public License",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "authors": [
         {
             "name": "Alex Kosarek",

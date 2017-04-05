@@ -7,20 +7,31 @@ import VueRouter from 'vue-router';
 
 Vue.use(VueRouter);
 
+var slug = '/databases/';
+
 var templateLayout = `
+<div>
+    <h1 id="dtitle" v-html="title"></h1>
     <ul id="results" class="list-unstyled">
       <li v-if="items != null && items.length == 0"><p>No Results</p></li>
       <li v-for="item in items">
-        <p><a :href="item.url" target="_blank"><b v-html="item.name"></b></a></p>
+        <h4><a :href="item.url" target="_blank"><b v-html="item.name"></b></a></h4>
         <p v-html="item.description"></p>
-        <p><b>Categories:</b> 
-        <ul class="list-inline text-capitalize">
-          <li v-for="cat in item.categories" v-html="cat.replace(/_/g, '&nbsp;')">
-          </li>
-        </ul>
+        <p v-if="item.userLimit" v-html="item.userLimit" class="userLimits"></p>
+        <p><b>Subjects:</b> 
+            <ul class="cat">
+                <template v-for="cat in item.categories">
+                    <template v-for="(subs, cate) in item.subjects" v-if="cate === cat">
+                        <li v-for="s in subs">
+                            <router-link :to="'/area/' + cat + '/' + s" v-html="s.replace(/_/g, ' ')"></router-link>
+                        </li>
+                    </template>
+                </template>
+            </ul>
         </p>
       </li>
     </ul>
+</div>
 `;
 
 const All = Vue.extend({
@@ -28,6 +39,7 @@ const All = Vue.extend({
     data: function() {
         return {
             items: null,
+            title: 'ALL DATABASES',
         }
     },
     created: function() {
@@ -37,10 +49,9 @@ const All = Vue.extend({
         loadAllResults() {
             var self = this;
             self.items = null;
-            var link = '/database/list';
+            var link = slug + 'list';
             var data = $.get(link, function(data) {
                 self.items = data;
-
             });
         }
     }
@@ -52,16 +63,19 @@ const Letters = Vue.extend({
         return {
             items: null,
             az: null,
+            title: null,
         }
     },
     created: function() {
         this.az = this.$route.params.letter;
         this.loadLetter(this.az);
+        this.title = this.az.toUpperCase();
     },
     watch: {
         $route() {
             this.az = this.$route.params.letter;
             this.loadLetter(this.az);
+            this.title = this.az.toUpperCase();
         }
     },
     methods: {
@@ -69,7 +83,7 @@ const Letters = Vue.extend({
             var self = this;
             var link = link || self.az;
             self.items = null;
-            var link = '/database/az/' + link;
+            var link = slug + 'az/' + link;
             var data = $.get(link, function(data) {
                 self.items = data;
             });
@@ -84,6 +98,7 @@ const Areas = Vue.extend({
             items: null,
             area: null,
             subject: null,
+            title: null,
         }
     },
     created: function() {
@@ -106,10 +121,12 @@ const Areas = Vue.extend({
 
             if (self.subject === undefined) {
                 url = self.area;
+                self.title = self.area.replace(/_/g, ' ').toUpperCase();
             } else {
                 url = self.area + '/' + self.subject;
+                self.title = self.area.replace(/_/g, ' ').toUpperCase() + ' - ' + self.subject.replace(/_/g, ' ').toUpperCase();
             }
-            var link = '/database/area/' + url;
+            var link = slug + 'area/' + url;
             var data = $.get(link, function(data) {
                 self.items = data;
             });
@@ -118,7 +135,7 @@ const Areas = Vue.extend({
 });
 
 Vue.component('search-component', {
-    template: '<input type="text" v-model="query" v-on:input="search()" class="form-control" placeholder="Search..." />',
+    template: '<input type="text" v-model="query" v-on:input="search()" class="form-control" placeholder="Search for Databases" />',
     data: function() {
         return {
             query: null,
@@ -144,6 +161,7 @@ const Search = Vue.extend({
     data: function() {
         return {
             items: null,
+            title: null,
         }
     },
     watch: {
@@ -155,10 +173,16 @@ const Search = Vue.extend({
         getSearch() {
             var self = this;
             self.items = null;
-            var link = '/database/search/' + this.$route.params.query;
+            var search = this.$route.params.query;
+
+            if (search == ' ' || search == '&nbsp;' || search == null) {
+                return ' ';
+            }
+            var link = slug + 'search/' + search;
             var data = $.get(link, function(data) {
                 self.items = data;
             });
+            self.title = 'SEARCH - ' + search.toUpperCase();
         },
     }
 })
@@ -188,6 +212,25 @@ const router = new VueRouter({
     routes
 })
 
+router.beforeEach(function (to, from, next) {
+    scrollTo(document.body, 0, 30);
+    next();
+})
+
+function scrollTo(element, to, duration) {
+    if (duration < 0) return;
+    var difference = to - element.scrollTop;
+    var perTick = difference / duration * 2;
+
+    setTimeout(function() {
+        element.scrollTop = element.scrollTop + perTick;
+        scrollTo(element, to, duration - 2);
+    }, 10);
+}
+
 const app = new Vue({
     router
 }).$mount('#app')
+
+
+    

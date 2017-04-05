@@ -1,6 +1,6 @@
 <?php
 
-Route::group(['prefix' => 'database', 'namespace' => 'Seumunday\\Azdatabases'], function () {
+Route::group(['prefix' => config('azdatabases.slug'), 'namespace' => 'Seumunday\\Azdatabases'], function () {
     Route::get('/', 'AzdatabasesController@index');
     // Get All DBs
     Route::get('list', 'AzdatabasesController@list');

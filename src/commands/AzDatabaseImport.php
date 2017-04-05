@@ -53,7 +53,7 @@ class AzDatabaseImport extends Command
                 $alt_title_type = '';
                 $url = '';
                 $description = '';
-                $user = '';
+                $userLimit = '';
                 $metadata = '';
                 $area = '';
                 $area_map = [];
@@ -111,13 +111,11 @@ class AzDatabaseImport extends Command
                             break;
                         case '500':
                             //uer limit
-                            $user='';
                             foreach ($field->subfield as $sub) {
                                 switch ((string) $sub['code']) {
                                     case 'a':
-                                        if (stristr($sub, 'Concurrent')) {
-                                            $user = $sub;
-                                        }
+                                        $userLimit = (array) $sub;
+                                        $userLimit = $userLimit[0];
                                         break;
                                 }
                             }
@@ -200,6 +198,7 @@ class AzDatabaseImport extends Command
                     'metadata' => $metadata,
                     'categories' => $categories,
                     'subjects' => $subjects,
+                    'userLimit' => $userLimit
                 ];
 
                 array_push($output, $entry);
@@ -207,7 +206,6 @@ class AzDatabaseImport extends Command
         } // end ListRecords->record
 
         $file = json_encode($output);
-        
         Storage::disk('local')->put('azDatabase.json', $file);
     }
 }

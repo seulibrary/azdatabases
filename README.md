@@ -52,6 +52,8 @@ Insert your OAI url from alma into the newly transfered config file.
 > [Alma OAI Integration API](https://developers.exlibrisgroup.com/alma/integrations/oai)
 > [Exlibris OAI Article](https://knowledge.exlibrisgroup.com/Alma/Product_Documentation/Alma_Online_Help_(English)/Integrations_with_External_Systems/030Resource_Management/060Setting_Up_OAI_Integration)
 
+You may also change the url slug for this plugin. Please keep in mind you will also have to change it in the azdatabases.js file that's imported as well. To change that file, set the variable on line 10 to the same value that's in the config file.
+
 #### Set Up Command
 In app/Console/Kernel.php, add the following to protected $commands:
 ```
