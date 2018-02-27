@@ -5,8 +5,7 @@
 		"laravel", "alma", "primo", "exlibris", "database", "databases"
 	],
     "homepage": "https://github.com/seumunday/Azdatabases",
-    "license": "GNU General Public License",
-    "version": "1.0.2",
+    "license": "GPL-3.0-or-later",
     "authors": [
         {
             "name": "Alex Kosarek",
